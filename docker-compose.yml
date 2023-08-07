@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+  php-fpm:
+    build: php-fpm
+    restart: unless-stopped
+    user: "${UID}:${GID}"
+    volumes:
+      - "${APP_DIR}:/var/www/html"
+      - "./php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini:ro"
+    expose:
+      - "9000"
+    environment:
+      PHP_IDE_CONFIG: "serverName=Docker"
+      COMPOSER_HOME: "/tmp/.composer"
+      DATABASE_URL: "mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE}?serverVersion=5.7"
+
+  nginx:
+    image: nginx:1.19.2-alpine
+    restart: unless-stopped
+    user: "${UID}:${GID}"
+    volumes:
+      - "./nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
+      - "${APP_DIR}:/var/www/html"
+    ports:
+      - "80:8080"
+
+  mysql:
+    image: mysql:5.7.31
+    restart: unless-stopped
+    user: "${UID}:${GID}"
+    volumes:
+      - "mysql:/var/lib/mysql"
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+
+  node_js:
+    image: node:16.13.1-alpine3.14
+    restart: unless-stopped
+    user: "${UID}:${GID}"
+    volumes:
+      - "${APP_DIR}:/var/www/html"
+    working_dir: /var/www/html
+    ports:
+      - "8080:8080"
+    tty: true
+
+volumes:
+  mysql:
