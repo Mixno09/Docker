@@ -13,7 +13,6 @@ services:
     environment:
       PHP_IDE_CONFIG: "serverName=Docker"
       COMPOSER_HOME: "/tmp/.composer"
-      DATABASE_URL: "mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE}?serverVersion=5.7"
 
   nginx:
     image: nginx:1.19.2-alpine
@@ -39,6 +38,21 @@ services:
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
 
+# для тестов
+  mysql_test:
+    image: mysql:5.7.31
+    restart: unless-stopped
+    user: "${UID}:${GID}"
+    volumes:
+      - "mysql_test:/var/lib/mysql_test"
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: "${MYSQL_DATABASE_TEST}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+
   node_js:
     image: node:16.13.1-alpine3.14
     restart: unless-stopped
@@ -52,3 +66,4 @@ services:
 
 volumes:
   mysql:
+  mysql_test:
