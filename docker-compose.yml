@@ -44,7 +44,7 @@ services:
     restart: unless-stopped
     user: "${UID}:${GID}"
     volumes:
-      - "mysql_test:/var/lib/mysql_test"
+      - "mysql_test:/var/lib/mysql"
     ports:
       - "3307:3306"
     environment:
@@ -66,4 +66,5 @@ services:
 
 volumes:
   mysql:
+#для тестов
   mysql_test:
