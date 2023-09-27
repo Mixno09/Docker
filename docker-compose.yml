@@ -8,6 +8,7 @@ services:
     volumes:
       - "${APP_DIR}:/var/www/html"
       - "./php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini:ro"
+      - "./php-fpm/php.ini:/usr/local/etc/php/conf.d/php.ini:ro"
     expose:
       - "9000"
     environment:

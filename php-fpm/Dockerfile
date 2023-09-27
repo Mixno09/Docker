@@ -13,3 +13,5 @@ RUN install-php-extensions apcu
 RUN install-php-extensions intl
 RUN install-php-extensions pdo_mysql
 RUN install-php-extensions zip
+# todo по необходимости
+RUN install-php-extensions gd
